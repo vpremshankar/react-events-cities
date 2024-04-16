@@ -1,33 +1,71 @@
-import React, { useContext } from 'react';
-import { ThemeContext } from '../contexts/ThemeContext'; // Assuming you've already created the ThemeContext
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Switch from '@mui/material/Switch'; // Import the Switch component
+import React, { useState } from "react";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import {
+  AppBar,
+  Switch,
+  CssBaseline,
+  Typography,
+  FormGroup,
+  FormControlLabel,
+  Grid,
+  Box
+} from "@mui/material";
+import { Outlet } from 'react-router-dom';
 
-const YourHeaderComponent: React.FC = () => {
-  // console.log(ThemeContext);
-  // const { theme, setTheme } = ThemeContext; // Assuming you have a toggleTheme function in your context
+const lightTheme = createTheme({
+  palette: {
+    mode: "light",
+  },
+});
 
-  const { theme, toggleTheme } = useContext(ThemeContext);
-  console.log(theme);
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
+
+const Header = () => {
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  const changeTheme = () => {
+    setIsDarkTheme(!isDarkTheme);
+  };
 
   return (
-    <AppBar position="sticky">
-      <Toolbar>
-        <Typography variant="h6">
-          Book Events
-        </Typography>
-        <Typography>Light</Typography>
-        <Switch
-          checked={theme === "dark"}
-          onChange={() => toggleTheme(JSON.stringify(theme))}
-          color="primary"
-        />
-        <Typography>Dark</Typography>
-      </Toolbar>
-    </AppBar>
+    <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+      <CssBaseline />
+      <header>
+        <AppBar position="sticky">
+          <Grid container spacing={2}>
+            <Grid item xs={7}>
+              <Typography variant="h4" component="h4" sx={{ml:0.5}}>
+                BookYourEvents
+              </Typography>
+            </Grid>
+            <Grid item xs={5}>
+              <Box sx={{ m: 0.5 }}>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isDarkTheme}
+                        onChange={changeTheme}
+                      />
+                    }
+                    label={isDarkTheme ? "Dark Theme" : "Light Theme"}
+                    labelPlacement="start"
+                  />
+                </FormGroup>
+              </Box>
+            </Grid>
+          </Grid>
+        </AppBar>
+      </header>
+      <main>
+        <Outlet />
+      </main>
+    </ThemeProvider>
   );
 };
 
-export default YourHeaderComponent;
+export default Header;
