@@ -12,17 +12,13 @@ const HomeComponent: React.FC = () => {
     const [state, dispatch] = useReducer(EventReducer, initialState);
 
     useEffect(() => {
-        if (state.city) {
+        if (!state.city) {
             const fetchEvents = async () => {
                 const events = await FetchJsonData('events');
                 dispatch({ type: 'UPDATE_EVENTS', payload: events });
             }
             fetchEvents();
         }
-        else {
-            console.log(`city: ${state.city}`);
-        }
-
     }, [state.city]);
 
     const updateCity = (city: string) => {

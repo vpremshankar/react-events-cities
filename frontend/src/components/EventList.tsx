@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    Typography,
     Grid
 } from '@mui/material';
 import EventCard from "./EventCard";
@@ -16,7 +15,6 @@ type EventListProps = {
 }
 
 const EventList: React.FC<EventListProps> = ({ eventData }) => {
-    console.log(eventData);
     return (
         <Grid container spacing={2} sx={{ m: 5 }}>
             {
